@@ -1,0 +1,23 @@
+# Input data
+*.txt
+
+# Prerequisites
+*.d
+
+# Object files
+*.o
+*/*.o
+*.ko
+*.obj
+*.elf
+
+# Libraries
+*.lib
+*.a
+*.la
+*.lo
+
+# Executables
+*.exe
+*.out
+*.app
