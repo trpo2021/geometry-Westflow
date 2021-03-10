@@ -1,5 +1,6 @@
 #include "parser.h"
 #include <ctype.h>
+#include <errno.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
@@ -14,28 +15,12 @@ const Token CIRCLE_TEMPLATE[] = {{.data = "circle", .type = TokenWord},
 
 static bool try_parse_number(const char* string, double* result)
 {
-    bool has_dot = false;
-    if (isdigit(string[0]) || (string[0] == '-' && isdigit(string[1])))
-    {
-        for (int i = 1; i < strlen(string); i++)
-        {
-            if (string[i] == '.' && i + 1 < strlen(string))
-            {
-                if (has_dot)
-                {
-                    return false;
-                }
-                has_dot = true;
-            }
-            else if (!isdigit(string[i]))
-            {
-                return false;
-            }
-        }
-        *result = strtod(string, NULL);
-        return true;
-    }
-    return false;
+    char* error = NULL;
+    errno = 0;
+    *result = strtod(string, &error);
+    if (errno != 0 || *error != '\0')
+        return false;
+    return true;
 }
 
 static Circle* create_circle(TokenList* tokens, const char* string)
@@ -156,6 +141,7 @@ void parse(char** lines, int length)
             Circle* cir = (Circle*)figure->data;
             printf("\n%d)\tCircle. Point: [%lf, %lf], Radius: %lf\n\n",
                    line + 1, cir->position.x, cir->position.y, cir->radius);
+            free(figure->data);
             free(figure);
         }
     }

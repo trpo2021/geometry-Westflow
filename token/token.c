@@ -13,7 +13,7 @@ Token create_token_from_char(char c, int line, int column)
 Token create_token_from_string(char* string, TokenType type, int line,
                                int column)
 {
-    Token token = {.data = concat_string("", string),
+    Token token = {.data = clone_string(string),
                    .type = type,
                    .line = line,
                    .column = column};
@@ -84,7 +84,11 @@ void token_list_remove(TokenList* this, int index)
 
 void token_list_dispose(TokenList* this)
 {
+    for (int i = 0; i < this->size; i++)
+    {
+        free(this->list[i].data);
+        // free(this->list[i]);
+    }
     free(this->list);
-    this->list = NULL;
-    this->size = 0;
+    free(this);
 }

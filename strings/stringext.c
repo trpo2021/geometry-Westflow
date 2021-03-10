@@ -4,6 +4,13 @@
 #include <stdlib.h>
 #include <string.h>
 
+char* clone_string(const char* string)
+{
+    char* clone = malloc(strlen(string) + 1);
+    memcpy(clone, string, strlen(string) + 1);
+    return clone;
+}
+
 char* concat_string(char* first, char* last)
 {
     char* result = malloc(sizeof(char) * (strlen(first) + strlen(last) + 1));
@@ -14,6 +21,10 @@ char* concat_string(char* first, char* last)
     }
     memcpy(result, first, strlen(first));
     memcpy(result + strlen(first), last, strlen(last) + 1);
+    if (strlen(first) > 0)
+    {
+        free(first);
+    }
     return result;
 }
 
@@ -45,16 +56,23 @@ char** split_string(int* length, char* string, char* separator)
     return result;
 }
 
-char* append_char(const char* string, char c)
+char* append_char(char* string, char c)
 {
     size_t sz = strlen(string);
-    char* result = malloc(sz + 2);
+    char* result = NULL;
+    if (sz == 0)
+    {
+        result = malloc(2);
+    }
+    else
+    {
+        result = realloc(string, sz + 2);
+    }
     if (!result)
     {
         perror("malloc");
         exit(-1);
     }
-    strcpy(result, string);
     result[sz] = c;
     result[sz + 1] = '\0';
     return result;

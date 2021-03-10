@@ -113,6 +113,7 @@ TokenList* lex(const char* data, size_t length, int line)
     }
     if (has_error)
     {
+        token_list_dispose(tokens);
         return NULL;
     }
     return tokens;
