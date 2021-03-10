@@ -12,7 +12,7 @@ char* read_file(const char* filename)
     stream = fopen(filename, "r");
     if (!stream)
     {
-        perror("fopen");
+        printf("Error: could not open file <%s>\n", filename);
         exit(-2);
     }
     while ((nread = getline(&line, &len, stream)) != -1)
