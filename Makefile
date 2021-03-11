@@ -4,7 +4,7 @@ LIB_NAME = libgeometry
 CFLAGS = -Wall -Werror
 CPPFLAGS = -I src -MP -MMD
 LDFLAGS =
-LDLIBS =
+LDLIBS = -lm
 LSTFLAGS = 
 
 DEBUG ?= 1

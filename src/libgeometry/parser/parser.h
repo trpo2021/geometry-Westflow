@@ -3,4 +3,4 @@
 #include <libgeometry/geometry.h>
 #include <libgeometry/lexer/lexer.h>
 
-void parse(char** lines, int length);
+Figure** parse(char** lines, int length, int* fcount);

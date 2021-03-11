@@ -126,8 +126,14 @@ static Figure* parse_line(TokenList* tokens, const char* string)
     return NULL;
 }
 
-void parse(char** lines, int length)
+Figure** parse(char** lines, int length, int* fcount)
 {
+    Figure** figures = malloc(sizeof(Figure));
+    if (!figures)
+    {
+        exit(-1);
+    }
+    int count = 1;
     for (int line = 0; line < length; line++)
     {
         TokenList* tokens = lex(lines[line], strlen(lines[line]), line + 1);
@@ -138,11 +144,15 @@ void parse(char** lines, int length)
         }
         if (figure)
         {
-            Circle* cir = (Circle*)figure->data;
-            printf("\n%d)\tCircle. Point: [%lf, %lf], Radius: %lf\n\n",
-                   line + 1, cir->position.x, cir->position.y, cir->radius);
-            free(figure->data);
-            free(figure);
+            figures[count - 1] = figure;
+            Figure** temp = realloc(figures, sizeof(figures) * (++count));
+            if (!temp)
+            {
+                exit(-1);
+            }
+            figures = temp;
         }
     }
+    *(fcount) = count - 1;
+    return figures;
 }
