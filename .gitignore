@@ -6,7 +6,6 @@
 
 # Object files
 *.o
-*/*.o
 *.ko
 *.obj
 *.elf
