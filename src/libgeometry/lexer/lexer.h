@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../exception/exception.h"
-#include "../token/token.h"
+#include <libgeometry/exception/exception.h>
+#include <libgeometry/token/token.h>
 #include <stdlib.h>
 
 typedef enum

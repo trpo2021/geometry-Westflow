@@ -1,5 +1,5 @@
-#include "filereader/reader.h"
-#include "parser/parser.h"
+#include <geometry/filereader/reader.h>
+#include <libgeometry/geometry.h>
 #include <stdio.h>
 
 int main(int argc, char** args)
@@ -10,6 +10,7 @@ int main(int argc, char** args)
         int length = 0;
         char** array = split_string(&length, data, "\n\r");
         parse(array, length);
+        free(array);
     }
     else
     {
