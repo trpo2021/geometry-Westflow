@@ -1,7 +1,5 @@
 #pragma once
 
-#include <libgeometry/parser/parser.h>
-
 typedef enum
 {
     FigureCircle = 0,
@@ -27,3 +25,11 @@ typedef struct
     void* data;
     FigureType type;
 } Figure;
+
+Figure** get_figures(char** lines, int length, int* count);
+
+void free_figures(Figure** figures, int count);
+
+double find_circle_area(Circle* circle);
+
+double find_circle_perimeter(Circle* circle);
