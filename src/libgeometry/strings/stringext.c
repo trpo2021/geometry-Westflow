@@ -1,5 +1,5 @@
-#include "stringext.h"
 #include <ctype.h>
+#include <libgeometry/strings/stringext.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

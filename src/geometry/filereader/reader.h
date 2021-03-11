@@ -1,5 +1,5 @@
 #pragma once
 
-#include "../strings/stringext.h"
+#include <libgeometry/strings/stringext.h>
 
 char* read_file(const char* filename);

@@ -1,4 +1,4 @@
-#include "exception.h"
+#include <libgeometry/exception/exception.h>
 #include <stdio.h>
 
 void print_exception(const char* data, int column)

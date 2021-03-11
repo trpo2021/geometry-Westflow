@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Strings/stringext.h"
+#include <libgeometry/strings/stringext.h>
 #include <stdlib.h>
 
 typedef enum

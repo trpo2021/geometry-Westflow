@@ -1,5 +1,5 @@
-#include "lexer.h"
 #include <ctype.h>
+#include <libgeometry/lexer/lexer.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>

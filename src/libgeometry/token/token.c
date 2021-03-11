@@ -1,4 +1,4 @@
-#include "token.h"
+#include <libgeometry/token/token.h>
 #include <stdio.h>
 
 Token create_token_from_char(char c, int line, int column)
