@@ -5,18 +5,13 @@ Token create_token_from_char(char c, int line, int column)
 {
     char* data = "";
     data = append_char(data, c);
-    Token token = {
-        .data = data, .type = (TokenType)c, .line = line, .column = column};
+    Token token = {.data = data, .type = (TokenType)c, .line = line, .column = column};
     return token;
 }
 
-Token create_token_from_string(char* string, TokenType type, int line,
-                               int column)
+Token create_token_from_string(char* string, TokenType type, int line, int column)
 {
-    Token token = {.data = clone_string(string),
-                   .type = type,
-                   .line = line,
-                   .column = column};
+    Token token = {.data = clone_string(string), .type = type, .line = line, .column = column};
     return token;
 }
 

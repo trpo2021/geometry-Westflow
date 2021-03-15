@@ -28,8 +28,7 @@ typedef struct
 
 Token create_token_from_char(char c, int line, int column);
 
-Token create_token_from_string(char* string, TokenType type, int line,
-                               int column);
+Token create_token_from_string(char* string, TokenType type, int line, int column);
 
 TokenList* token_list_init(TokenList* this);
 
