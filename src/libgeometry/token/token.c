@@ -1,3 +1,4 @@
+#include <libgeometry/exception/exception.h>
 #include <libgeometry/token/token.h>
 #include <stdio.h>
 
@@ -5,18 +6,13 @@ Token create_token_from_char(char c, int line, int column)
 {
     char* data = "";
     data = append_char(data, c);
-    Token token = {
-        .data = data, .type = (TokenType)c, .line = line, .column = column};
+    Token token = {.data = data, .type = (TokenType)c, .line = line, .column = column};
     return token;
 }
 
-Token create_token_from_string(char* string, TokenType type, int line,
-                               int column)
+Token create_token_from_string(char* string, TokenType type, int line, int column)
 {
-    Token token = {.data = clone_string(string),
-                   .type = type,
-                   .line = line,
-                   .column = column};
+    Token token = {.data = clone_string(string), .type = type, .line = line, .column = column};
     return token;
 }
 
@@ -27,7 +23,7 @@ TokenList* token_list_init(TokenList* this)
     list = malloc(sizeof(Token));
     if (!list)
     {
-        perror("malloc");
+        alloc_exception();
         free(list);
         exit(-1);
     }
@@ -46,7 +42,7 @@ TokenList* token_list_add(TokenList* this, Token item)
     list = realloc(this->list, this->size * sizeof(Token));
     if (!list)
     {
-        perror("realloc");
+        alloc_exception();
         free(list);
         exit(-1);
     }
@@ -75,7 +71,7 @@ void token_list_remove(TokenList* this, int index)
     pointer = realloc(temp.list, temp.size * sizeof(Token));
     if (!pointer)
     {
-        perror("realloc");
+        alloc_exception();
         free(pointer);
         exit(-1);
     }
@@ -87,7 +83,6 @@ void token_list_dispose(TokenList* this)
     for (int i = 0; i < this->size; i++)
     {
         free(this->list[i].data);
-        // free(this->list[i]);
     }
     free(this->list);
     free(this);

@@ -5,13 +5,9 @@
 #include <stdio.h>
 #include <string.h>
 
-const Token CIRCLE_TEMPLATE[] = {{.data = "circle", .type = TokenWord},
-                                 {.data = "(", .type = TokenOpBracket},
-                                 {.data = "double", .type = TokenNumber},
-                                 {.data = "double", .type = TokenNumber},
-                                 {.data = ",", .type = TokenComma},
-                                 {.data = "double", .type = TokenNumber},
-                                 {.data = ")", .type = TokenClBracket}};
+const Token CIRCLE_TEMPLATE[] = {{.type = TokenWord},     {.type = TokenOpBracket}, {.type = TokenNumber},
+                                 {.type = TokenNumber},   {.type = TokenComma},     {.type = TokenNumber},
+                                 {.type = TokenClBracket}};
 
 static bool try_parse_number(const char* string, double* result)
 {
@@ -19,7 +15,9 @@ static bool try_parse_number(const char* string, double* result)
     errno = 0;
     *result = strtod(string, &error);
     if (errno != 0 || *error != '\0')
+    {
         return false;
+    }
     return true;
 }
 
@@ -33,10 +31,7 @@ static Circle* create_circle(TokenList* tokens, const char* string)
         if (i >= tokens->size)
         {
             print_exception(string, tokens->list[tokens->size - 1].column);
-            printf("Unexpected end of line. Expected <%s>\n",
-                   CIRCLE_TEMPLATE[i].data);
-            printf("Use the following signature: <circle><(>[ ]<double>[ "
-                   "]<double>[ ]<,>[ ]<double>[ ]<)>\n");
+            end_line_exception(tokens->list[tokens->size - 1].data);
             return NULL;
         }
         if (tokens->list[i].type == CIRCLE_TEMPLATE[i].type)
@@ -46,10 +41,7 @@ static Circle* create_circle(TokenList* tokens, const char* string)
                 if (!try_parse_number(tokens->list[i].data, &numbers[pos++]))
                 {
                     print_exception(string, tokens->list[i].column);
-                    printf("Unexpected token <%s> at line %d and column %d, "
-                           "expected <double>\n",
-                           tokens->list[i].data, tokens->list[i].line,
-                           tokens->list[i].column);
+                    unexpected_token_exception(tokens->list[i].data, tokens->list[i].line, tokens->list[i].column);
                     return NULL;
                 }
             }
@@ -57,26 +49,21 @@ static Circle* create_circle(TokenList* tokens, const char* string)
         else
         {
             print_exception(string, tokens->list[i].column);
-            printf("Unexpected token <%s> at line %d and column %d, expected "
-                   "<%s>\n",
-                   tokens->list[i].data, tokens->list[i].line,
-                   tokens->list[i].column, CIRCLE_TEMPLATE[i].data);
+            unexpected_token_exception(tokens->list[i].data, tokens->list[i].line, tokens->list[i].column);
             return NULL;
         }
     }
     if (tokens->size > template_size)
     {
         print_exception(string, tokens->list[template_size].column);
-        printf("Unexpected token <%s> at line %d and column %d\n",
-               tokens->list[template_size].data,
-               tokens->list[template_size].line,
-               tokens->list[template_size].column);
+        unexpected_token_exception(tokens->list[template_size].data, tokens->list[template_size].line,
+                                   tokens->list[template_size].column);
         return NULL;
     }
     circle = malloc(sizeof(Circle));
     if (!circle)
     {
-        perror("malloc");
+        alloc_exception();
         exit(-1);
     }
     circle->position.x = numbers[0];
@@ -91,7 +78,7 @@ static Figure* create_figure(FigureType type, void* data)
     figure = malloc(sizeof(Figure));
     if (!figure)
     {
-        perror("malloc");
+        alloc_exception();
         exit(-1);
     }
     figure->type = type;
@@ -107,7 +94,7 @@ static Figure* parse_line(TokenList* tokens, const char* string)
     }
     if (tokens->list[0].type == TokenWord)
     {
-        if (strcmp(tokens->list[0].data, CIRCLE_TEMPLATE[0].data) == 0)
+        if (strcmp(tokens->list[0].data, "circle") == 0)
         {
             Circle* circle = create_circle(tokens, string);
             if (circle)
@@ -117,12 +104,11 @@ static Figure* parse_line(TokenList* tokens, const char* string)
             return NULL;
         }
         print_exception(string, tokens->list[0].column);
-        printf("Unexpected word '%s'. Expected 'circle'\n",
-               tokens->list[0].data);
+        unexpected_word_exception(tokens->list[0].data);
         return NULL;
     }
     print_exception(string, tokens->list[0].column);
-    printf("Unexpected token <%s>. Expected word.\n", tokens->list[0].data);
+    unexpected_token_exception(tokens->list[0].data, tokens->list[0].line, tokens->list[0].column);
     return NULL;
 }
 

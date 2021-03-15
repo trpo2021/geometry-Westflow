@@ -1,4 +1,5 @@
 #include <ctype.h>
+#include <libgeometry/exception/exception.h>
 #include <libgeometry/strings/stringext.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -16,7 +17,7 @@ char* concat_string(char* first, char* last)
     char* result = malloc(sizeof(char) * (strlen(first) + strlen(last) + 1));
     if (!result)
     {
-        perror("malloc");
+        alloc_exception();
         exit(-1);
     }
     memcpy(result, first, strlen(first));
@@ -47,7 +48,7 @@ char** split_string(int* length, char* string, char* separator)
         result = realloc(result, sizeof(char*) * ++(*length));
         if (!result)
         {
-            perror("realloc");
+            alloc_exception();
             exit(-1);
         }
         result[(*length) - 1] = p;
@@ -70,7 +71,7 @@ char* append_char(char* string, char c)
     }
     if (!result)
     {
-        perror("malloc");
+        alloc_exception();
         exit(-1);
     }
     result[sz] = c;

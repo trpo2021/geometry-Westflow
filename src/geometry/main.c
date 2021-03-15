@@ -18,14 +18,10 @@ int main(int argc, char** args)
             switch (figures[i]->type)
             {
             case FigureCircle:
-                printf("FIGURE: Circle. Point: %lf, %lf. Radius: %lf\n",
-                       ((Circle*)figures[i]->data)->position.x,
-                       ((Circle*)figures[i]->data)->position.y,
-                       ((Circle*)figures[i]->data)->radius);
-                printf("Area: %lf\n",
-                       find_circle_area(((Circle*)figures[i]->data)));
-                printf("Perimeter: %lf\n",
-                       find_circle_perimeter(((Circle*)figures[i]->data)));
+                printf("FIGURE: Circle. Point: %lf, %lf. Radius: %lf\n", ((Circle*)figures[i]->data)->position.x,
+                       ((Circle*)figures[i]->data)->position.y, ((Circle*)figures[i]->data)->radius);
+                printf("Area: %lf\n", find_circle_area(((Circle*)figures[i]->data)));
+                printf("Perimeter: %lf\n", find_circle_perimeter(((Circle*)figures[i]->data)));
                 break;
             case FigureTriangle:
                 break;
