@@ -9,6 +9,12 @@ const Token CIRCLE_TEMPLATE[] = {{.type = TokenWord},     {.type = TokenOpBracke
                                  {.type = TokenNumber},   {.type = TokenComma},     {.type = TokenNumber},
                                  {.type = TokenClBracket}};
 
+const Token TRIANGLE_TEMPLATE[] = {
+    {.type = TokenWord},   {.type = TokenOpBracket}, {.type = TokenOpBracket}, {.type = TokenNumber},
+    {.type = TokenNumber}, {.type = TokenComma},     {.type = TokenNumber},    {.type = TokenNumber},
+    {.type = TokenComma},  {.type = TokenNumber},    {.type = TokenNumber},    {.type = TokenComma},
+    {.type = TokenNumber}, {.type = TokenNumber},    {.type = TokenClBracket}, {.type = TokenClBracket}};
+
 static bool try_parse_number(const char* string, double* result)
 {
     char* error = NULL;
@@ -72,6 +78,63 @@ static Circle* create_circle(TokenList* tokens, const char* string)
     return circle;
 }
 
+static Triangle* create_triangle(TokenList* tokens, const char* string)
+{
+    Triangle* triangle = malloc(sizeof(Triangle));
+    if (!triangle)
+    {
+        alloc_exception();
+        exit(-1);
+    }
+    double numbers[8];
+    size_t template_size = sizeof(TRIANGLE_TEMPLATE) / sizeof(TRIANGLE_TEMPLATE[0]);
+    for (int i = 0, pos = 0; i < template_size; i++)
+    {
+        if (i >= tokens->size)
+        {
+            print_exception(string, tokens->list[tokens->size - 1].column);
+            end_line_exception(tokens->list[tokens->size - 1].data);
+            return NULL;
+        }
+        if (tokens->list[i].type == TRIANGLE_TEMPLATE[i].type)
+        {
+            if (tokens->list[i].type == TokenNumber)
+            {
+                if (!try_parse_number(tokens->list[i].data, &numbers[pos++]))
+                {
+                    print_exception(string, tokens->list[i].column);
+                    unexpected_token_exception(tokens->list[i].data, tokens->list[i].line, tokens->list[i].column);
+                    return NULL;
+                }
+            }
+        }
+        else
+        {
+            print_exception(string, tokens->list[i].column);
+            unexpected_token_exception(tokens->list[i].data, tokens->list[i].line, tokens->list[i].column);
+            return NULL;
+        }
+    }
+    if (tokens->size > template_size)
+    {
+        print_exception(string, tokens->list[template_size].column);
+        unexpected_token_exception(tokens->list[template_size].data, tokens->list[template_size].line,
+                                   tokens->list[template_size].column);
+        return NULL;
+    }
+    for (int i = 0, n = 0; i < sizeof(triangle->points) / sizeof(triangle->points[0]); i++, n += 2)
+    {
+        triangle->points[i].x = numbers[n];
+        triangle->points[i].y = numbers[n + 1];
+    }
+    if (triangle->points[0].x != triangle->points[3].x || triangle->points[0].y != triangle->points[3].y)
+    {
+        printf("Wrong triangle. Last point must be equal to the first point.\n");
+        return NULL;
+    }
+    return triangle;
+}
+
 static Figure* create_figure(FigureType type, void* data)
 {
     Figure* figure = NULL;
@@ -103,9 +166,22 @@ static Figure* parse_line(TokenList* tokens, const char* string)
             }
             return NULL;
         }
-        print_exception(string, tokens->list[0].column);
-        unexpected_word_exception(tokens->list[0].data);
-        return NULL;
+        else if (strcmp(tokens->list[0].data, "triangle") == 0)
+        {
+            Triangle* triangle = create_triangle(tokens, string);
+            if (triangle)
+            {
+                return create_figure(FigureTriangle, triangle);
+            }
+            return NULL;
+        }
+        else
+        {
+            print_exception(string, tokens->list[0].column);
+            unexpected_word_exception(tokens->list[0].data);
+            printf("Expected: 'circle' or 'triangle'\n");
+            return NULL;
+        }
     }
     print_exception(string, tokens->list[0].column);
     unexpected_token_exception(tokens->list[0].data, tokens->list[0].line, tokens->list[0].column);

@@ -22,6 +22,11 @@ typedef struct
 
 typedef struct
 {
+    Point points[4];
+} Triangle;
+
+typedef struct
+{
     void* data;
     FigureType type;
 } Figure;
@@ -33,3 +38,7 @@ void free_figures(Figure** figures, int count);
 double find_circle_area(Circle* circle);
 
 double find_circle_perimeter(Circle* circle);
+
+double find_triangle_area(Triangle* triangle);
+
+double find_triangle_perimeter(Triangle* triangle);

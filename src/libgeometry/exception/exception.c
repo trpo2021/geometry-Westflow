@@ -23,7 +23,7 @@ void unexpected_word_exception(const char* word)
 
 void unknown_symbol_exception(char symbol, int line, int column)
 {
-    printf("Unexpected token %c at line %d and column %d.\n", symbol, line, column);
+    printf("Unexpected symbol %c at line %d and column %d.\n", symbol, line, column);
 }
 
 void end_line_exception(const char* token)
