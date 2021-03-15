@@ -1,3 +1,4 @@
+#include <libgeometry/exception/exception.h>
 #include <libgeometry/token/token.h>
 #include <stdio.h>
 
@@ -22,7 +23,7 @@ TokenList* token_list_init(TokenList* this)
     list = malloc(sizeof(Token));
     if (!list)
     {
-        perror("malloc");
+        alloc_exception();
         free(list);
         exit(-1);
     }
@@ -41,7 +42,7 @@ TokenList* token_list_add(TokenList* this, Token item)
     list = realloc(this->list, this->size * sizeof(Token));
     if (!list)
     {
-        perror("realloc");
+        alloc_exception();
         free(list);
         exit(-1);
     }
@@ -70,7 +71,7 @@ void token_list_remove(TokenList* this, int index)
     pointer = realloc(temp.list, temp.size * sizeof(Token));
     if (!pointer)
     {
-        perror("realloc");
+        alloc_exception();
         free(pointer);
         exit(-1);
     }
@@ -82,7 +83,6 @@ void token_list_dispose(TokenList* this)
     for (int i = 0; i < this->size; i++)
     {
         free(this->list[i].data);
-        // free(this->list[i]);
     }
     free(this->list);
     free(this);

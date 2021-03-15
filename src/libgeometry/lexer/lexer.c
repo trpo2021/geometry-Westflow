@@ -23,8 +23,9 @@ TokenList* lex(const char* data, size_t length, int line)
                 ls = LexerWord;
                 if (column + 1 >= length)
                 {
-                    tokens = token_list_add(tokens, create_token_from_string(token_content, TokenWord, line,
-                                                                             column + 1 - strlen(token_content)));
+                    int t_column = column + 1 - strlen(token_content);
+                    Token item = create_token_from_string(token_content, TokenWord, line, t_column);
+                    tokens = token_list_add(tokens, item);
                     free(token_content);
                 }
             }
@@ -34,8 +35,9 @@ TokenList* lex(const char* data, size_t length, int line)
                 ls = LexerNumber;
                 if (column + 1 >= length)
                 {
-                    tokens = token_list_add(tokens, create_token_from_string(token_content, TokenNumber, line,
-                                                                             column + 1 - strlen(token_content)));
+                    int t_column = column + 1 - strlen(token_content);
+                    Token item = create_token_from_string(token_content, TokenNumber, line, t_column);
+                    tokens = token_list_add(tokens, item);
                     free(token_content);
                 }
             }
@@ -46,7 +48,7 @@ TokenList* lex(const char* data, size_t length, int line)
             else if (c != ' ')
             {
                 print_exception(data, column);
-                printf("Unexpected token %c at line %d and column %d\n\n", c, line, column);
+                unknown_symbol_exception(c, line, column);
                 has_error = true;
             }
             break;
@@ -56,16 +58,18 @@ TokenList* lex(const char* data, size_t length, int line)
                 token_content = append_char(token_content, c);
                 if (column + 1 >= length)
                 {
-                    tokens = token_list_add(tokens, create_token_from_string(token_content, TokenWord, line,
-                                                                             column + 1 - strlen(token_content)));
+                    int t_column = column + 1 - strlen(token_content);
+                    Token item = create_token_from_string(token_content, TokenWord, line, t_column);
+                    tokens = token_list_add(tokens, item);
                     free(token_content);
                     ls = LexerDefault;
                 }
             }
             else
             {
-                tokens = token_list_add(
-                    tokens, create_token_from_string(token_content, TokenWord, line, column - strlen(token_content)));
+                int t_column = column - strlen(token_content);
+                Token item = create_token_from_string(token_content, TokenWord, line, t_column);
+                tokens = token_list_add(tokens, item);
                 free(token_content);
                 token_content = "";
                 --column;
@@ -78,16 +82,18 @@ TokenList* lex(const char* data, size_t length, int line)
                 token_content = append_char(token_content, c);
                 if (column + 1 >= length)
                 {
-                    tokens = token_list_add(tokens, create_token_from_string(token_content, TokenNumber, line,
-                                                                             column + 1 - strlen(token_content)));
+                    int t_column = column + 1 - strlen(token_content);
+                    Token item = create_token_from_string(token_content, TokenNumber, line, t_column);
+                    tokens = token_list_add(tokens, item);
                     free(token_content);
                     ls = LexerDefault;
                 }
             }
             else
             {
-                tokens = token_list_add(
-                    tokens, create_token_from_string(token_content, TokenNumber, line, column - strlen(token_content)));
+                int t_column = column - strlen(token_content);
+                Token item = create_token_from_string(token_content, TokenNumber, line, t_column);
+                tokens = token_list_add(tokens, item);
                 free(token_content);
                 token_content = "";
                 --column;
