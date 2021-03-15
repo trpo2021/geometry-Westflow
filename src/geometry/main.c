@@ -18,18 +18,36 @@ int main(int argc, char** args)
             switch (figures[i]->type)
             {
             case FigureCircle:
-                printf("FIGURE: Circle. Point: %lf, %lf. Radius: %lf\n", ((Circle*)figures[i]->data)->position.x,
-                       ((Circle*)figures[i]->data)->position.y, ((Circle*)figures[i]->data)->radius);
-                printf("Area: %lf\n", find_circle_area(((Circle*)figures[i]->data)));
-                printf("Perimeter: %lf\n", find_circle_perimeter(((Circle*)figures[i]->data)));
-                break;
-            case FigureTriangle:
-                break;
-            case FigureRegion:
-                break;
-            case FigureNone:
-                break;
+            {
+                Circle* circle = (Circle*)figures[i]->data;
+                printf("FIGURE: Circle.\n");
+                printf("Point: %lf, %lf.\nRadius: %lf.\n", circle->position.x, circle->position.y, circle->radius);
+                printf("Area: %lf\n", find_circle_area(circle));
+                printf("Perimeter: %lf\n", find_circle_perimeter(circle));
             }
+            break;
+            case FigureTriangle:
+            {
+                Triangle* triangle = (Triangle*)figures[i]->data;
+                printf("FIGURE: Triangle.\n");
+                for (int i = 0; i < sizeof(triangle->points) / sizeof(triangle->points[0]); i++)
+                {
+                    printf("Point: %lf, %lf.\n", triangle->points[i].x, triangle->points[i].y);
+                }
+                printf("Area: %lf\n", find_triangle_area(triangle));
+                printf("Perimeter: %lf\n", find_triangle_perimeter(triangle));
+            }
+            break;
+            case FigureRegion:
+            {
+            }
+            break;
+            case FigureNone:
+            {
+            }
+            break;
+            }
+            printf("\n");
         }
         free_figures(figures, count);
     }
