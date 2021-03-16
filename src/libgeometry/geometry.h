@@ -4,8 +4,7 @@ typedef enum
 {
     FigureCircle = 0,
     FigureTriangle = 1,
-    FigureRegion = 2,
-    FigureNone = -1
+    FigurePolygon = 2
 } FigureType;
 
 typedef struct
@@ -27,6 +26,12 @@ typedef struct
 
 typedef struct
 {
+    int length;
+    Point* points;
+} Polygon;
+
+typedef struct
+{
     void* data;
     FigureType type;
 } Figure;
@@ -42,3 +47,7 @@ double find_circle_perimeter(Circle* circle);
 double find_triangle_area(Triangle* triangle);
 
 double find_triangle_perimeter(Triangle* triangle);
+
+double find_polygon_area(Polygon* polygon);
+
+double find_polygon_perimeter(Polygon* polygon);
