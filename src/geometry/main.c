@@ -38,12 +38,16 @@ int main(int argc, char** args)
                 printf("Perimeter: %lf\n", find_triangle_perimeter(triangle));
             }
             break;
-            case FigureRegion:
+            case FigurePolygon:
             {
-            }
-            break;
-            case FigureNone:
-            {
+                Polygon* polygon = (Polygon*)figures[i]->data;
+                printf("FIGURE: Polygon.\n");
+                for (int i = 0; i < polygon->length; i++)
+                {
+                    printf("Point: %lf, %lf.\n", polygon->points[i].x, polygon->points[i].y);
+                }
+                printf("Area: %lf\n", find_polygon_area(polygon));
+                printf("Perimeter: %lf\n", find_polygon_perimeter(polygon));
             }
             break;
             }
